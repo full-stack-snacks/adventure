@@ -14,3 +14,16 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.red {
+    background-color: red;
+}
+
+.gray {
+    background-color: gray;
+}
+
+td {
+    width: 2rem;
+    height: 2rem;
+}

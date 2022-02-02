@@ -4,46 +4,67 @@ import { useState } from 'react'
 export default function Home() {
 
     const [map, setMap] = useState([])
+    const [player, setPlayer] = useState();
+    const [description, setDescription] = useState('');
 
-    async function handleStart() {
-        const response = await axios.get('/api/map');
-        setMap(response.data);
+    function getStyle(i, j) {
+
+        const styles = ["empty", "wall", "key", "trap", "door", "player"]
+
+
+        if (i == player.y && j == player.x) {
+            return "player";
+        } else {
+            const value = map[i][j];
+            return styles[parseInt(value)]
+        }
     }
 
-    async function move(direction) {
-        const response = await axios.post('/api/map', {
+    function handleSubmit(event) {
+        event.preventDefault();
+        const command = event.target.command.value;
+        doCommand(command);
+    }
+
+    async function doCommand(command) {
+        const response = await axios.post('/api/command', {
+            command,
+            player,
             map,
-            direction,
         });
 
-        setMap(response.data);
+        setPlayer(response.data.player);
+        setDescription(response.data.description);
+        setMap(response.data.map);
     }
 
     return (
-        <div>
+        <div className="container">
+            <form onSubmit={handleSubmit}>
+                <input name="command" />
+                <button>SEND</button>
+            </form>
+
+            <section>
+                <p>{description}</p>
+            </section>
             {map.length == 0 ?
-                <button onClick={handleStart}>START</button>
+                <p>Waiting...</p>
                 :
                 <div>
                     <table>
                         <tbody>
-                            {map.map((item, index) => (
-                                <tr key={index}>
-                                    {map[index].map((value, j) => (
-                                        <td key={index + ':' + j} className={value == 1 ? "red" : "gray"}>
-                                            {value}
+                            {map.map((_, i) => (
+                                <tr key={i}>
+                                    {map[i].map((_, j) => (
+                                        <td key={i + ':' + j} className={getStyle(i, j)}>
+
                                         </td>
                                     ))}
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                    <div>
-                        <button onClick={() => move("up")}>up</button>
-                        <button onClick={() => move("down")}>down</button>
-                        <button onClick={() => move("left")}>left</button>
-                        <button onClick={() => move("right")}>right</button>
-                    </div>
                 </div>
             }
 

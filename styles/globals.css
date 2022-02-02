@@ -15,15 +15,39 @@ a {
   box-sizing: border-box;
 }
 
-.red {
-    background-color: red;
+.wall {
+    background-color: black;
 }
 
-.gray {
-    background-color: gray;
+.empty {
+    background-color: rgb(235, 231, 231);
 }
+
+.trap {
+  background-color: firebrick;
+}
+
+.key {
+  background-color: forestgreen;
+}
+
+.door {
+  background-color: burlywood;
+}
+
+.player {
+  background-color: blue;
+}
+
+
 
 td {
-    width: 2rem;
-    height: 2rem;
+    width: 4rem;
+    height: 4rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
 }
